@@ -1,0 +1,1948 @@
+<script language="javascript">
+  function transferDate(amtstr) {
+
+
+    var numname = new Array('O', '一', '二', '三', '四', '五', '六', '七', '八', '九')
+    var splits
+    var ch
+    var mydate
+    mydate = ''
+    splits = amtstr.split('-', 3)
+
+    for (var j = 0; j < 4; j++) {
+      ch = splits[0].charAt(j)
+
+      mydate = mydate + numname[parseInt(ch)]
+    }
+    mydate = mydate + '年'
+
+
+    if (splits[1].length > 1) {
+      ch = splits[1].charAt(0)
+      if (ch != '1') {
+        mydate = mydate + numname[parseInt(ch)]
+        mydate = mydate + '十'
+      } else {
+        mydate = mydate + '十'
+      }
+
+      ch = splits[1].charAt(1)
+      if (ch != '0') {
+        mydate = mydate + numname[parseInt(ch)]
+        mydate = mydate + '月'
+      } else {
+        ch = splits[1].charAt(0)
+        mydate = mydate + numname[parseInt(ch)]
+        mydate = mydate + '月'
+      }
+    } else {
+      ch = splits[1].charAt(0)
+      mydate = mydate + numname[parseInt(ch)]
+      mydate = mydate + '月'
+    }
+
+
+    if (splits[2].charAt(1) != ' ') {
+      ch = splits[2].charAt(0)
+      if (ch != '1') {
+        mydate = mydate + numname[parseInt(ch)]
+      }
+      mydate = mydate + '十'
+
+
+      ch = splits[2].charAt(1)
+      if (ch != '0') {
+        mydate = mydate + numname[parseInt(ch)]
+      }
+    } else {
+      ch = splits[2].charAt(0)
+      mydate = mydate + numname[parseInt(ch)]
+    }
+    mydate = mydate + '日'
+    return mydate
+  }
+
+
+  function LeapYear(intYear) {
+    if (intYear % 100 == 0) {
+      if (intYear % 400 == 0) {
+        return true
+      }
+    } else {
+      if ((intYear % 4) == 0) {
+        return true
+      }
+    }
+    return false
+  }
+
+  function checkdate(sdate) {
+    now = new Date()
+
+    var flag = true
+    getdate = sdate.value
+    if (getdate.search(/^[0-9]{4}-(0[1-9]|[1-9]|1[1-2])-((0[1-9]|[1-9])|1[0-9]|2[0-9]|3[0-1])$/) == -1) // 判断输入格式时候正确
+    {
+      flag = false
+      sdate.value = now.getYear()
+      alert('您输入的日期不正确，请重新输入')
+
+    } else {
+      var year = getdate.substr(0, getdate.indexOf('-'))  // 获得年
+      // 下面操作获得月份
+      var transition_month = getdate.substr(0, getdate.lastIndexOf('-'))
+      var month = transition_month.substr(transition_month.lastIndexOf('-') + 1, transition_month.length)
+      if (month.indexOf('0') == 0) {
+        month = month.substr(1, month.length)
+      }
+      // 下面操作获得日期
+      var day = getdate.substr(getdate.lastIndexOf('-') + 1, getdate.length)
+      if (day.indexOf('0') == 0) {
+        day = day.substr(1, day.length)
+      }
+      flag = true
+    }
+    if ((month == 4 || month == 6 || month == 9 || month == 11) && (day > 30)) // 4,6,9,11月份日期不能超过30
+    {
+      flag = false
+    }
+    if (month == 2)  // 判断2月份
+    {
+      if (LeapYear(year)) {
+        if (day > 29 || day < 1) {
+          flag = false
+        }
+      } else {
+        if (day > 28 || day < 1) {
+          flag = false
+        }
+      }
+    } else {
+      flag = true
+    }
+    if (flag == false) {
+      alert('您输入的日期不正确，请重新输入!')
+      sdate.value = now.getYear()
+      sdate.value = ''
+      return false
+    }
+    return true
+  }
+
+  //新开上传文件窗口，Type代表上传文件类型，用于区分存放目录
+  //FormElement表单元素，返回表单元素值
+  function ShowUpfileDialog(sType, sFormElement) {
+    var nTop, nLeft
+    nTop = screen.height / 2 - 80
+    nLeft = screen.width / 2 - 260
+    var sFeatures = 'width=520, height=160, location=0, menubar=0, resizable=0, scrollbars=0, status=0, toolbar=0, top=' + nTop + ', left=' + nLeft
+    var sURL = 'upload/DialogUpfile.asp?Type=' + sType + '&FormElement=' + sFormElement
+    window.open(sURL, '', sFeatures)
+  }
+
+  function MM_jumpMenu(targ, selObj, restore) { //v3.0
+    eval(targ + '.location=\'' + selObj.options[selObj.selectedIndex].value + '\'')
+    if (restore) selObj.selectedIndex = 0
+  }
+
+
+</script>
+
+<script language="javascript" src="../js/md5.js"></script>
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+  <title>福州房地产信息网</title>
+  <link type="text/css" href="js/dh_style.css" rel="stylesheet"/>
+  <script type="text/javascript" src="js/jquery.js"></script>
+  <script type="text/javascript" src="js/js.js"></script>
+  <STYLE type=text/css>
+      BODY {
+          MARGIN: 0px;
+          BACKGROUND-COLOR: #1d62a0
+      }
+
+      BODY {
+          COLOR: #575757;
+          background-color: #C1D6FF;
+      }
+
+      TD {
+          COLOR: #575757;
+          font-size: 12px;
+      }
+
+      TH {
+          COLOR: #575757
+      }
+
+      .style21 {
+          COLOR: #ffffff
+      }
+
+      A {
+          COLOR: #575757;
+          text-decoration: none;
+      }
+
+      A:link {
+          COLOR: #575757
+      }
+
+      A:active {
+
+          COLOR: #575757
+      }
+
+      A:visited {
+          COLOR: #575757
+      }
+
+      A:hover {
+          COLOR: #575757
+      }
+  </STYLE>
+  <STYLE type=text/css>
+      A.white:link {
+          FONT-WEIGHT: normal;
+          COLOR: #ffffff;
+          LINE-HEIGHT: 18px;
+          TEXT-DECORATION: none
+      }
+
+      A.white:visited {
+          FONT-WEIGHT: normal;
+          COLOR: #ffffff;
+          LINE-HEIGHT: 18px;
+          TEXT-DECORATION: none
+      }
+
+      A.white:hover {
+          FONT-WEIGHT: normal;
+          COLOR: #ffffff;
+          LINE-HEIGHT: 18px;
+          TEXT-DECORATION: underline
+      }
+
+      A.white:active {
+          FONT-WEIGHT: normal;
+          COLOR: #ffffff;
+          LINE-HEIGHT: 18px;
+          TEXT-DECORATION: none
+      }
+
+      .white14 {
+          FONT-WEIGHT: bold;
+          FONT-SIZE: 14px;
+          COLOR: #ffffff
+      }
+
+      .ssss {
+          font-size: 9pt;
+          color: #0099FF;
+      }
+  </STYLE>
+</head>
+
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+
+<br/>
+<table border="0" width="1003" cellpadding="4" cellspacing="0" align="center">
+  <tr>
+    <td rowspan="2" bgcolor="#efefef" align="center" valign="top">
+      <style type="text/css">
+          <!--
+          .white14 {
+              FONT-WEIGHT: bold;
+              FONT-SIZE: 14px;
+              COLOR: #ffffff
+          }
+
+          -->
+      </style>
+      <table class="table" height="244" cellspacing="1" cellpadding="0"
+             width="100%" style="border:solid 1px #999999">
+        <tbody>
+        <tr>
+          <td
+              height="33" valign="top"
+              background="http://www.fzhouse.com.cn/pic/bluebg.gif" bgcolor="#767676" class="style16"><strong></strong>
+            <table height="25" cellspacing="0" cellpadding="0"
+                   width="100%" border="0">
+              <tbody>
+              <tr>
+                <td width="15"><IMG src="http://www.fzhouse.com.cn/pic/arrow3-1.gif" width=15 height=11></td>
+                <td class="white14" align="left" width="968">项目查询</td>
+                <td width="181"></td>
+              </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td id="real" valign="top" bgcolor="#f3f3f3"
+              height="206">
+            <table width="100%" height="218" border="0" cellpadding="0" cellspacing="0">
+              <tr>
+                <td height="218" valign="top">
+                  <table border="0" cellpadding="1" cellspacing="1" width="96%" align="center">
+                    <form name="form1" id="form1" method="post" action="result_new.asp">
+                      <tbody>
+                      <tr>
+                        <td>所在区县&nbsp;
+                          <select id="SelectXZQ" name="SelectXZQ" designtimedragdrop="208">
+                            <option value="" selected="selected">请选择地区</option>
+                            <option value="鼓楼区">鼓楼区</option>
+                            <option value="台江区">台江区</option>
+                            <option value="仓山区">仓山区</option>
+                            <option value="晋安区">晋安区</option>
+                            <option value="马尾区">马尾区</option>
+                          </select></td>
+                      </tr>
+                      <tr>
+                        <td><font face="宋体">项目座落&nbsp;
+                          <input type="text" name="zl_search" size="12"
+                                 style="BORDER-RIGHT: 1px solid; BORDER-TOP: 1px solid; BORDER-LEFT: 1px solid; BORDER-BOTTOM: 1px solid"
+                                 value=""/>
+                        </font></td>
+                      </tr>
+                      <tr>
+                        <td><font face="宋体">项目名称&nbsp;</font>
+                          <input
+                              style="BORDER-RIGHT: 1px solid; BORDER-TOP: 1px solid; BORDER-LEFT: 1px solid; BORDER-BOTTOM: 1px solid"
+                              value="" type="text" size="12" name="xm_search"/></td>
+                      </tr>
+                      <tr>
+                        <td><font face="宋体">公司名称&nbsp;
+                          <input
+                              style="BORDER-RIGHT: 1px solid; BORDER-TOP: 1px solid; BORDER-LEFT: 1px solid; BORDER-BOTTOM: 1px solid"
+                              value="" type="text" size="12" name="gs_search"/>
+                        </font></td>
+                      </tr>
+                      <tr>
+                        <td>许可证号&nbsp;
+                          <input type="text" name="zh_search" size="12"
+                                 style="BORDER-RIGHT: 1px solid; BORDER-TOP: 1px solid; BORDER-LEFT: 1px solid; BORDER-BOTTOM: 1px solid"
+                                 value=""/></td>
+                      </tr>
+                      <tr>
+                        <td><font face="宋体">所在板块&nbsp;
+                          <select id="SelectBK" name="SelectBK">
+                            <option value="" selected="selected">请选择板块</option>
+                            <option value="10">中心城区</option>
+                            <option value="20">东区板块</option>
+                            <option value="21">马尾板块</option>
+                            <option value="31">仓山旧区</option>
+                            <option value="32">金山板块</option>
+                            <option value="33">江滨板块</option>
+                            <option value="40">西区板块</option>
+                            <option value="50">北区板块</option>
+                          </select>
+                        </font></td>
+                      </tr>
+                      <tr>
+                        <td>请输入登记日期:</td>
+                      </tr>
+                      <tr>
+                        <td><font face="宋体">
+                          <input type="text" name="pzs_search" size="8"
+                                 style="BORDER-RIGHT: 1px solid; BORDER-TOP: 1px solid; BORDER-LEFT: 1px solid; BORDER-BOTTOM: 1px solid"
+                                 value=""/>
+                          至
+                          <input type="text" name="pzx_search" size="8"
+                                 style="BORDER-RIGHT: 1px solid; BORDER-TOP: 1px solid; BORDER-LEFT: 1px solid; BORDER-BOTTOM: 1px solid"
+                                 value=""/>
+                        </font></td>
+                      </tr>
+                      <tr>
+                        <td>请选择查询方法:</td>
+                      </tr>
+                      <tr>
+                        <td>&nbsp;
+                          <input
+                              style="BORDER-RIGHT: 1px solid; BORDER-TOP: 1px solid; BORDER-LEFT: 1px solid; BORDER-BOTTOM: 1px solid"
+                              type="radio" value="1" name="search_method"/>
+                          相与&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          <input
+                              style="BORDER-RIGHT: 1px solid; BORDER-TOP: 1px solid; BORDER-LEFT: 1px solid; BORDER-BOTTOM: 1px solid"
+                              type="radio" value="2" name="search_method"
+                              checked="checked"/>
+                          相或
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>&nbsp;
+                          <input
+                              style="BORDER-RIGHT: 1px solid; BORDER-TOP: 1px solid; BORDER-LEFT: 1px solid; BORDER-BOTTOM: 1px solid"
+                              type="submit" value="搜   索" name="btn_search"/>
+                          &nbsp;
+                          <input
+                              style="BORDER-RIGHT: 1px solid; BORDER-TOP: 1px solid; BORDER-LEFT: 1px solid; BORDER-BOTTOM: 1px solid"
+                              type="reset" value="重   填" name="btn_reset"/></td>
+                      </tr>
+                      <tr>
+                        <td><font face="宋体"></font></td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                      </tr>
+                      </tbody>
+                    </form>
+                    <tr>
+                      <td></td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+    </td>
+    <!--2013年前数据-->
+    <td height="21" bgcolor="#FFFFFF" width="774">&nbsp;</td>
+  </tr>
+  <tr>
+    <td bgcolor="#FFFFFF">
+      <!--2013年后数据-->
+
+      <table align="center" width="760" style="border-collapse:collapse;" border="1px" bordercolor="#000000">
+        <tr height=28>
+          <td height="28" colspan=6 align=left bgcolor=#efefef><b class="blue14b">&nbsp;新系统项目信息(注：以下数据只显示2008年以后取得预售许可项目信息。)</b>
+          </td>
+        </tr>
+        <tr height=28>
+          <td height="28" colspan=6 align=center bgcolor=#efefef><b class="blue14b">项目信息列表</b></td>
+        </tr>
+        <tr height=28>
+          <td width="90" height="24" align=center bgcolor=#CFDCEB>预售许可证号</td>
+
+          <td width="180" align=center bgcolor=#CFDCEB>项目名称</td>
+          <td width="60" align=center bgcolor=#CFDCEB>许可面积</td>
+          <td width="250" align=center bgcolor=#CFDCEB>预售楼号</td>
+          <td width="90" align=center bgcolor=#CFDCEB>批准日期</td>
+          <td width="90" align=center bgcolor=#CFDCEB>计划竣工日期</td>
+        </tr>
+
+        <tr height="25">
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">FZ许20210338</td>
+
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF"><A
+              href="proDetail.asp?projectID=MTA1MTh8MjAyMS85LzE4fDk0" target=_blank>
+            杨庭花园</a></td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">42509.15</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">地下室；</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2021/9/16</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2021/10/30</td>
+        </tr>
+        <tr>
+
+        <tr height="25">
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">FZ许20210337</td>
+
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF"><A
+              href="proDetail.asp?projectID=MTA1MTh8MjAyMS85LzE4fDE4" target=_blank>
+            杨庭花园</a></td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">13617.95</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">3#楼；</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2021/9/16</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2021/10/30</td>
+        </tr>
+        <tr>
+
+        <tr height="25">
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">FZ许20210336</td>
+
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF"><A
+              href="proDetail.asp?projectID=MTA3OTF8MjAyMS85LzE4fDgz" target=_blank>
+            璟云公馆</a></td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">11397.67</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">15#、15-1#楼；13#楼；</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2021/9/16</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2022/5/19</td>
+        </tr>
+        <tr>
+
+        <tr height="25">
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">FZ许20210335</td>
+
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF"><A
+              href="proDetail.asp?projectID=MTA3OTl8MjAyMS85LzE4fDU0" target=_blank>
+            映月台</a></td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">12601.08</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">8#楼；1#楼；5#楼；</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2021/9/15</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2022/10/15</td>
+        </tr>
+        <tr>
+
+        <tr height="25">
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">FZ许20210334</td>
+
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF"><A
+              href="proDetail.asp?projectID=MTA3ODl8MjAyMS85LzE4fDI0" target=_blank>
+            雅居乐雅榕苑</a></td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">10215.02</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">地下室；</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2021/9/15</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2022/1/1</td>
+        </tr>
+        <tr>
+
+        <tr height="25">
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">FZ许20210333</td>
+
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF"><A
+              href="proDetail.asp?projectID=MTA2ODR8MjAyMS85LzE4fDM3" target=_blank>
+            荣巨揽境小区</a></td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">6558.49</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">地下室；</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2021/9/15</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2022/6/30</td>
+        </tr>
+        <tr>
+
+        <tr height="25">
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">FZ许20210332</td>
+
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF"><A
+              href="proDetail.asp?projectID=MTA3OTF8MjAyMS85LzE4fDk0" target=_blank>
+            璟云公馆</a></td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">34021.66</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">1#楼；3#楼；2#楼；</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2021/9/14</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2022/7/29</td>
+        </tr>
+        <tr>
+
+        <tr height="25">
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">FZ许20210331</td>
+
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF"><A
+              href="proDetail.asp?projectID=MTA3ODd8MjAyMS85LzE4fDM=" target=_blank>
+            登云生态城A-3区...</a></td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">21905.72</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">A-3-50#楼；A-3-7#楼；A-3-39#楼...</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2021/9/13</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2023/3/30</td>
+        </tr>
+        <tr>
+
+        <tr height="25">
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">FZ许20210328</td>
+
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF"><A
+              href="proDetail.asp?projectID=MTA4MTN8MjAyMS85LzE4fDE=" target=_blank>
+            万和郡</a></td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">11851.43</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">1#；11#；7#；</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2021/9/10</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2023/5/31</td>
+        </tr>
+        <tr>
+
+        <tr height="25">
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">FZ许20210327</td>
+
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF"><A
+              href="proDetail.asp?projectID=MTA3ODN8MjAyMS85LzE4fDM5" target=_blank>
+            清逸华庭（帝封江...</a></td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">29213.44</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">地下室；</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2021/9/8</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2021/12/25</td>
+        </tr>
+        <tr>
+
+        <tr height="25">
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">FZ许20210326</td>
+
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF"><A
+              href="proDetail.asp?projectID=MTA3ODR8MjAyMS85LzE4fDk1" target=_blank>
+            星海江筑</a></td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">7314.84</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">1#楼；</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2021/9/7</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2023/4/19</td>
+        </tr>
+        <tr>
+
+        <tr height="25">
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">FZ许20210325</td>
+
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF"><A
+              href="proDetail.asp?projectID=MTA3MTl8MjAyMS85LzE4fDc=" target=_blank>
+            华润万象城四期</a></td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">36956.29</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">MIXC#楼；</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2021/9/7</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2022/10/15</td>
+        </tr>
+        <tr>
+
+        <tr height="25">
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">FZ许20210324</td>
+
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF"><A
+              href="proDetail.asp?projectID=MTA3MDd8MjAyMS85LzE4fDkw" target=_blank>
+            玖序公馆</a></td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">29972.25</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">地下室；</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2021/9/2</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2021/12/30</td>
+        </tr>
+        <tr>
+
+        <tr height="25">
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">FZ许20210323</td>
+
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF"><A
+              href="proDetail.asp?projectID=MTA3MjR8MjAyMS85LzE4fDIx" target=_blank>
+            融创公馆（四区）...</a></td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">16241.79</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">D地块地下室；</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2021/9/2</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2021/10/30</td>
+        </tr>
+        <tr>
+
+        <tr height="25">
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">FZ许20210322</td>
+
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF"><A
+              href="proDetail.asp?projectID=MTA3MjJ8MjAyMS85LzE4fDc2" target=_blank>
+            融创公馆（二区）...</a></td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">6310.45</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">B地块地下室；</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2021/9/1</td>
+          <td style="border-bottom:none; text-align:center; background-color:#FFFFFF">2021/10/30</td>
+        </tr>
+        <tr>
+
+          <td colspan="6" bgcolor="#efefef">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第1页/共210页
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;查到记录共3145条
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <A href='result_new.asp?page2=2&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK='>[下一页]</A>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            到第
+            <select onChange="MM_jumpMenu('parent',this,0)">
+
+              <option selected
+                      value="/result_new.asp?page2=1&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                1
+              </option>
+
+              <option
+                  value="/result_new.asp?page2=2&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                2
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=3&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                3
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=4&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                4
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=5&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                5
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=6&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                6
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=7&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                7
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=8&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                8
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=9&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                9
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=10&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                10
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=11&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                11
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=12&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                12
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=13&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                13
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=14&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                14
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=15&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                15
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=16&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                16
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=17&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                17
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=18&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                18
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=19&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                19
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=20&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                20
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=21&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                21
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=22&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                22
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=23&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                23
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=24&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                24
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=25&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                25
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=26&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                26
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=27&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                27
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=28&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                28
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=29&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                29
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=30&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                30
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=31&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                31
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=32&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                32
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=33&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                33
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=34&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                34
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=35&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                35
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=36&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                36
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=37&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                37
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=38&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                38
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=39&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                39
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=40&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                40
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=41&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                41
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=42&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                42
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=43&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                43
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=44&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                44
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=45&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                45
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=46&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                46
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=47&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                47
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=48&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                48
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=49&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                49
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=50&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                50
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=51&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                51
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=52&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                52
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=53&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                53
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=54&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                54
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=55&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                55
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=56&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                56
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=57&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                57
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=58&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                58
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=59&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                59
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=60&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                60
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=61&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                61
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=62&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                62
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=63&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                63
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=64&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                64
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=65&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                65
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=66&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                66
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=67&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                67
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=68&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                68
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=69&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                69
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=70&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                70
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=71&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                71
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=72&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                72
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=73&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                73
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=74&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                74
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=75&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                75
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=76&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                76
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=77&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                77
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=78&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                78
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=79&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                79
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=80&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                80
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=81&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                81
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=82&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                82
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=83&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                83
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=84&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                84
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=85&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                85
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=86&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                86
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=87&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                87
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=88&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                88
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=89&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                89
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=90&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                90
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=91&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                91
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=92&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                92
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=93&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                93
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=94&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                94
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=95&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                95
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=96&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                96
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=97&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                97
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=98&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                98
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=99&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                99
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=100&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                100
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=101&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                101
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=102&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                102
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=103&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                103
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=104&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                104
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=105&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                105
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=106&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                106
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=107&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                107
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=108&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                108
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=109&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                109
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=110&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                110
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=111&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                111
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=112&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                112
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=113&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                113
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=114&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                114
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=115&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                115
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=116&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                116
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=117&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                117
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=118&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                118
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=119&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                119
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=120&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                120
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=121&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                121
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=122&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                122
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=123&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                123
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=124&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                124
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=125&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                125
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=126&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                126
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=127&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                127
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=128&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                128
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=129&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                129
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=130&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                130
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=131&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                131
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=132&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                132
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=133&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                133
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=134&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                134
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=135&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                135
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=136&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                136
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=137&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                137
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=138&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                138
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=139&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                139
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=140&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                140
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=141&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                141
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=142&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                142
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=143&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                143
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=144&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                144
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=145&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                145
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=146&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                146
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=147&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                147
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=148&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                148
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=149&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                149
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=150&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                150
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=151&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                151
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=152&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                152
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=153&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                153
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=154&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                154
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=155&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                155
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=156&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                156
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=157&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                157
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=158&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                158
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=159&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                159
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=160&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                160
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=161&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                161
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=162&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                162
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=163&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                163
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=164&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                164
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=165&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                165
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=166&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                166
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=167&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                167
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=168&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                168
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=169&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                169
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=170&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                170
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=171&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                171
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=172&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                172
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=173&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                173
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=174&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                174
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=175&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                175
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=176&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                176
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=177&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                177
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=178&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                178
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=179&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                179
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=180&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                180
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=181&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                181
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=182&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                182
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=183&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                183
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=184&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                184
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=185&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                185
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=186&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                186
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=187&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                187
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=188&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                188
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=189&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                189
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=190&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                190
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=191&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                191
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=192&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                192
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=193&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                193
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=194&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                194
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=195&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                195
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=196&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                196
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=197&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                197
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=198&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                198
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=199&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                199
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=200&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                200
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=201&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                201
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=202&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                202
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=203&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                203
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=204&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                204
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=205&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                205
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=206&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                206
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=207&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                207
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=208&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                208
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=209&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                209
+              </option>
+
+
+              <option
+                  value="/result_new.asp?page2=210&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=">
+                210
+              </option>
+
+
+            </select>
+            页
+
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+<script type="text/javascript" language="javascript">
+  function MM_jumpMenu(targ, selObj, restore) {
+    eval(targ + '.location=\'' + selObj.options[selObj.selectedIndex].value + '\'')
+    if (restore) selObj.selectedIndex = 0
+  }
+</script>
+
+
+<table cellspacing="0" cellpadding="0" width="1003" align="center" bgcolor="#ffffff"
+       border="0">
+  <tbody>
+  <tr>
+    <td bgcolor="#3399FF" height="3"></td>
+  </tr>
+  <tr>
+    <td align="middle" bgcolor="#eeeeee">
+      <table width="100%" border="0" cellpadding="0" cellspacing="0">
+        <tbody>
+        <tr>
+          <td height="28" align="center" bgcolor="#86C2FF"><font color="#ffffff">|</font> <a class="Bottom"
+                                                                                             href="http://fwdj.fuzhou.gov.cn/#">设为首页</a>
+            <font
+                color="#ffffff">|</font> <a class="Bottom"
+                                            href="javascript:window.external.addFavorite('http://fwdj.fuzhou.gov.cn/','福州房地产信息网');">加入收藏</a>
+            <font color="#ffffff">|</font></td>
+        </tr>
+        <tr>
+          <td width="96%" height="71" align="center">
+            福州市不动产登记和交易中心版权所有，未经许可，严禁转载。 闽ICP备11010002号 <br/>
+            福州市西二环福屿路200号 业务咨询:0591-87525468 87540234　网站联系:0591-87529814
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+</html>
