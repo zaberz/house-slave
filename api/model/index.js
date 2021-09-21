@@ -1,5 +1,6 @@
 const {Sequelize, DataTypes} = require('sequelize')
-
+const pg = require('pg')
+console.log(pg);
 let dbName = process.env.DBNAME
 let dbUser = process.env.DBUSER
 let dbPWD = process.env.DBPWD
