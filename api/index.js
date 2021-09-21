@@ -13,6 +13,6 @@ app.get('/', (req, res)=> {
   })
 })
 
-app.use('/crawl', router)
+app.use('/api/crawl', router)
 
 app.listen(9000)
