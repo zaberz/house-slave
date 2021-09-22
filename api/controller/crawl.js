@@ -4,7 +4,26 @@ const fse = require('fs-extra')
 const sequelize = require('../model/index')
 const log = require('../utils/log')
 const getProjectInfo = async () => {
-  let url = 'http://222.77.178.63:7002/result_new.asp?page2=210&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK='
+
+  let page = await sequelize.models.Log.findOne({
+    where: {
+      tag: 'getproject'
+    },
+    order: [['id', 'DESC']]
+  })
+  let pNo = page.detail
+
+  while (pNo > 1) {
+    let list = await getDataByPage(pNo-1)
+    let a = await insertProject(list, pNo-1)
+    pNo -= 1
+  }
+
+  return ''
+}
+
+async function getDataByPage(page) {
+  let url = `http://222.77.178.63:7002/result_new.asp?page2=${page}&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=`
   let html = await gbkRequest({
     url,
     method: 'get'
@@ -46,12 +65,10 @@ const getProjectInfo = async () => {
       completionDate,
     }
   }
-  // await sequelize.models.Project.bulkCreate(list)
-
-  let a = await insertProject(list, 210)
 
   return list
 }
+
 
 async function insertProject(saveData, page) {
   let lastId = 0
