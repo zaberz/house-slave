@@ -1,6 +1,6 @@
 const {Sequelize, DataTypes} = require('sequelize')
 const pg = require('pg')
-console.log(pg);
+// console.log(pg);
 let dbName = process.env.DBNAME
 let dbUser = process.env.DBUSER
 let dbPWD = process.env.DBPWD
@@ -26,15 +26,9 @@ const DailySale = sequelize.define('DailySale', {
   day: {
     type: DataTypes.DATE,
   },
-  suite: {
-    type: DataTypes.INTEGER
+  detail: {
+    type: DataTypes.JSON
   },
-  square: {
-    type: DataTypes.FLOAT
-  },
-  districtName: {
-    type: DataTypes.STRING
-  }
 })
 
 const DailyAvailable = sequelize.define('DailyAvailable', {

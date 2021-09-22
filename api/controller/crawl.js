@@ -3,6 +3,7 @@ const cheerio = require('cheerio')
 const fse = require('fs-extra')
 const sequelize = require('../model/index')
 const log = require('../utils/log')
+const dayjs = require('dayjs')
 const getProjectInfo = async () => {
 
   let page = await sequelize.models.Log.findOne({
@@ -94,10 +95,29 @@ const getDailySale = async () => {
   let html = await gbkRequest({
     url
   })
+  // let a = fse.outputFile('a1.html', html)
+  // let html = fse.readFileSync('./a1.html', 'utf-8')
+  let $ = cheerio.load(html)
+  let a = $('body > table > tbody > tr:nth-child(2)')
+  let res = []
 
-  let a = fse.output('a1.html', html)
-  //
-  // let $ = cheerio(html)
+  while (a && a.length>0) {
+    let children = a.children()
+    res.push({
+      area: $(children[0]).text().trim(),
+      suite: $(children[1]).text().trim(),
+      square: $(children[2]).text().trim()
+    })
+    a = a.next()
+  }
+
+  let now = +new Date()
+
+  let b = await sequelize.models.DailySale.create({
+    day: now,
+    detail: res
+  })
+  return b
   // let res = await sequelize.models.DailySale.upsert()
 }
 

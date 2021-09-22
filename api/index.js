@@ -7,7 +7,7 @@ const express = require("express");
 const db = require("./model/index");
 const router = require("./router/index");
 let app = express();
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
   res.json({
     a: 1
   });
