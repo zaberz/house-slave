@@ -71,6 +71,23 @@ async function insertProject(saveData, page) {
   await log('getproject', page)
 }
 
+
+const getDailySale = async () => {
+  let url = 'http://222.77.178.63:7002/qrqy.asp'
+  let html = await gbkRequest({
+    url
+  })
+
+  let a = fse.output('a1.html', html)
+  //
+  // let $ = cheerio(html)
+  // let res = await sequelize.models.DailySale.upsert()
+}
+
+
+
+
 module.exports = {
-  getProjectInfo
+  getProjectInfo,
+  getDailySale
 }
