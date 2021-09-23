@@ -75,6 +75,20 @@ const Project = sequelize.define('Project', {
   }
 })
 
+const ProjectDetail = sequelize('ProjectDetail', {
+  projectId: DataTypes.STRING,
+  name: DataTypes.STRING,
+  districtName: DataTypes.STRING,
+  address: DataTypes.STRING,
+  companyName: DataTypes.STRING
+  // 总套数	1727	总面积	114,951	住宅套数	1069	住宅面积	90,298
+  // 可售总套数	866	可售总面积	42,396	可售住宅套数	218	可售住宅面积	19,227
+  // 预定总套数	0	预定总面积	0	预定住宅套数	0	预定住宅面积	0
+  // 已售总套数	861	已售总面积	72,555	已售住宅套数	851	已售住宅面积	71,071
+  // 已登记总套数	521	已登记总面积	46,591	已登记住宅套数	512	已登记住宅面积	45,273
+})
+
+
 const log = sequelize.define('Log', {
   tag: {
     type: DataTypes.STRING
