@@ -121,10 +121,50 @@ const getDailySale = async () => {
   // let res = await sequelize.models.DailySale.upsert()
 }
 
+const getDailyAvail = async () => {
+  let url = 'http://222.77.178.63:7002/qrks.asp'
+  let html = await gbkRequest({
+    url
+  })
+  // let a = fse.outputFile('a1.html', html)
+  // let html = fse.readFileSync('./a1.html', 'utf-8')
+  let $ = cheerio.load(html)
+  let a = $('body > table > tbody > tr:nth-child(2)')
+  let res = []
 
+  while (a && a.length>0) {
+    let children = a.children()
+    res.push({
+      area: $(children[0]).text().trim(),
+      project: $(children[1]).text().trim(),
+      suite: $(children[2]).text().trim(),
+      square: $(children[3]).text().trim()
+    })
+    a = a.next()
+  }
 
+  let now = +new Date()
+
+  let b = await sequelize.models.DailyAvailable.create({
+    day: now,
+    detail: res
+  })
+  return b
+}
+
+const getProjectDetail = async () => {
+  await getProjectDetailById()
+}
+
+async function getProjectDetailById(pid) {
+  let t = dayjs().format('YYYY-M-DD|mm')
+  let pstr = `${pid}|${t}`
+  let url =`http://222.77.178.63:7002/proDetail.asp?projectID=${pstr}`
+  console.log(url)
+}
 
 module.exports = {
   getProjectInfo,
-  getDailySale
+  getDailySale,
+  getDailyAvail
 }

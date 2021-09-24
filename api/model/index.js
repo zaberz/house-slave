@@ -35,19 +35,12 @@ const DailyAvailable = sequelize.define('DailyAvailable', {
   day: {
     type: DataTypes.DATE,
   },
-  project: {
-    type: DataTypes.INTEGER,
+  detail: {
+    type: DataTypes.JSON
   },
-  suite: {
-    type: DataTypes.INTEGER
-  },
-  square: {
-    type: DataTypes.FLOAT
-  },
-  districtName: {
-    type: DataTypes.STRING
-  }
 })
+
+// DailyAvailable.sync({alter: true})
 
 const Project = sequelize.define('Project', {
   licenceNo: {
@@ -55,6 +48,7 @@ const Project = sequelize.define('Project', {
     allowNull: false,
     unique: true
   },
+  projectRealId: DataTypes.STRING,
   projectId: {
     type: DataTypes.STRING,
   },
@@ -74,13 +68,32 @@ const Project = sequelize.define('Project', {
     type: DataTypes.DATE,
   }
 })
+// Project.sync({alter: true})
 
-const ProjectDetail = sequelize('ProjectDetail', {
+const ProjectDetail = sequelize.define('ProjectDetail', {
+  date: DataTypes.DATE,
   projectId: DataTypes.STRING,
   name: DataTypes.STRING,
   districtName: DataTypes.STRING,
   address: DataTypes.STRING,
-  companyName: DataTypes.STRING
+  companyName: DataTypes.STRING,
+
+  countSuite: DataTypes.INTEGER,
+  countArea: DataTypes.FLOAT,
+  countHouse: DataTypes.INTEGER,
+  countHouseArea: DataTypes.FLOAT,
+
+  availCountSuite: DataTypes.INTEGER,
+  availCountArea: DataTypes.FLOAT,
+  availCountHouse: DataTypes.INTEGER,
+  availCountHouseArea: DataTypes.FLOAT,
+
+  soldCountSuite: DataTypes.INTEGER,
+  soldCountArea: DataTypes.FLOAT,
+  soldCountHouse: DataTypes.INTEGER,
+  soldCountHouseArea: DataTypes.FLOAT,
+
+  isSoldout: DataTypes.BOOLEAN
   // 总套数	1727	总面积	114,951	住宅套数	1069	住宅面积	90,298
   // 可售总套数	866	可售总面积	42,396	可售住宅套数	218	可售住宅面积	19,227
   // 预定总套数	0	预定总面积	0	预定住宅套数	0	预定住宅面积	0
