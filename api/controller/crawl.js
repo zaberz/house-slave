@@ -2,8 +2,12 @@ const gbkRequest = require('../utils/gbkRequest')
 const cheerio = require('cheerio')
 const fse = require('fs-extra')
 const sequelize = require('../model/index')
+const {DataTypes} = require('sequelize')
 const log = require('../utils/log')
 const dayjs = require('dayjs')
+
+
+
 const getProjectInfo = async () => {
 
   let page = await sequelize.models.Log.findOne({
@@ -153,18 +157,67 @@ const getDailyAvail = async () => {
 }
 
 const getProjectDetail = async () => {
-  await getProjectDetailById()
+  return await getProjectDetailById(-99999602)
 }
 
 async function getProjectDetailById(pid) {
   let t = dayjs().format('YYYY-M-DD|mm')
   let pstr = `${pid}|${t}`
+  pstr = Buffer.from(pstr).toString('base64')
   let url =`http://222.77.178.63:7002/proDetail.asp?projectID=${pstr}`
-  console.log(url)
+  let html = await gbkRequest({url})
+  let $ = cheerio.load(html)
+  let data = {
+    // name: DataTypes.STRING,
+    // districtName: DataTypes.STRING,
+    // address: DataTypes.STRING,
+    // companyName: DataTypes.STRING,
+    //
+    // countSuite: DataTypes.INTEGER,
+    // countArea: DataTypes.FLOAT,
+    // countHouse: DataTypes.INTEGER,
+    // countHouseArea: DataTypes.FLOAT,
+    //
+    // availCountSuite: DataTypes.INTEGER,
+    // availCountArea: DataTypes.FLOAT,
+    // availCountHouse: DataTypes.INTEGER,
+    // availCountHouseArea: DataTypes.FLOAT,
+    //
+    // soldCountSuite: DataTypes.INTEGER,
+    // soldCountArea: DataTypes.FLOAT,
+    // soldCountHouse: DataTypes.INTEGER,
+    // soldCountHouseArea: DataTypes.FLOAT,
+    //
+    // isSoldout: DataTypes.BOOLEAN
+  }
+
+  data.name = $('body > table:nth-child(3) > tbody > tr > td > table:nth-child(2) > tbody > tr > td:nth-child(2) > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(1) > td:nth-child(2)').text()
+  data.districtName = $('body > table:nth-child(3) > tbody > tr > td > table:nth-child(2) > tbody > tr > td:nth-child(2) > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(1) > td:nth-child(4)').text()
+  data.address = $('body > table:nth-child(3) > tbody > tr > td > table:nth-child(2) > tbody > tr > td:nth-child(2) > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(2) > td:nth-child(2)').text()
+  data.companyName = $('body > table:nth-child(3) > tbody > tr > td > table:nth-child(2) > tbody > tr > td:nth-child(2) > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td:nth-child(2)').text()
+
+  data.countSuite = $('#div1 > table > tbody > tr:nth-child(1) > td:nth-child(2)').text()
+  data.countArea = $('#div1 > table > tbody > tr:nth-child(1) > td:nth-child(4)').text()
+  data.countHouse = $('#div1 > table > tbody > tr:nth-child(1) > td:nth-child(6)').text()
+  data.countHouseArea = $('#div1 > table > tbody > tr:nth-child(1) > td:nth-child(8)').text()
+
+  data.availCountSuite = $('#div1 > table > tbody > tr:nth-child(2) > td:nth-child(2)').text()
+  data.availCountArea = $('#div1 > table > tbody > tr:nth-child(2) > td:nth-child(4)').text()
+  data.availCountHouse = $('#div1 > table > tbody > tr:nth-child(2) > td:nth-child(6)').text()
+  data.availCountHouseArea = $('#div1 > table > tbody > tr:nth-child(2) > td:nth-child(8)').text()
+
+  data.soldCountSuite = $('#div1 > table > tbody > tr:nth-child(4) > td:nth-child(2)').text()
+  data.soldCountArea = $('#div1 > table > tbody > tr:nth-child(4) > td:nth-child(4)').text()
+  data.soldCountHouse = $('#div1 > table > tbody > tr:nth-child(4) > td:nth-child(6)').text()
+  data.soldCountHouseArea = $('#div1 > table > tbody > tr:nth-child(4) > td:nth-child(8)').text()
+  data.isSoldout = data.availCountSuite == 0
+  return data
 }
 
 module.exports = {
   getProjectInfo,
   getDailySale,
-  getDailyAvail
+  getDailyAvail,
+  getProjectDetail,
+  getProjectDetailById
 }

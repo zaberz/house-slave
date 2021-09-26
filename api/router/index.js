@@ -1,5 +1,5 @@
 const express = require('express')
-const {getProjectInfo, getDailySale, getDailyAvail} = require('../controller/crawl')
+const {getProjectInfo, getDailySale, getDailyAvail,getProjectDetail} = require('../controller/crawl')
 const router = express.Router()
 
 router.get('/projectInfo', async function (req, res) {
@@ -22,5 +22,11 @@ router.get('/availdailyavail', async (req, res) => {
   })
 })
 
+router.get('/projectdetail', async (req, res) => {
+  let data = await getProjectDetail()
+  res.send({
+    msg: data
+  })
+})
 
 module.exports = router

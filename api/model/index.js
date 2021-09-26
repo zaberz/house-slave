@@ -10,6 +10,7 @@ const sequelize = new Sequelize(dbName, dbUser, dbPWD, {
   host: dbHost,
   port: dbPort,
   dialect: 'postgres',
+  logging: false
 })
 
 const District = sequelize.define('District', {
@@ -72,7 +73,10 @@ const Project = sequelize.define('Project', {
 
 const ProjectDetail = sequelize.define('ProjectDetail', {
   date: DataTypes.DATE,
-  projectId: DataTypes.STRING,
+  projectId: {
+    type:DataTypes.STRING,
+    unique: true
+  },
   name: DataTypes.STRING,
   districtName: DataTypes.STRING,
   address: DataTypes.STRING,
@@ -100,7 +104,7 @@ const ProjectDetail = sequelize.define('ProjectDetail', {
   // 已售总套数	861	已售总面积	72,555	已售住宅套数	851	已售住宅面积	71,071
   // 已登记总套数	521	已登记总面积	46,591	已登记住宅套数	512	已登记住宅面积	45,273
 })
-
+// ProjectDetail.sync({alter: true})
 
 const log = sequelize.define('Log', {
   tag: {
