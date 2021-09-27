@@ -193,14 +193,16 @@ async function insertLicenceData(data, t) {
   )
   return res
 }
-async function insertProject(data,t) {
-  let res = await sequelize.models.Project.findOrCreate({
+async function insertProject(data, t) {
+  let a = await sequelize.models.Project.findOne({
     where: {
       projectId: data.projectId
-    },
-    defaults: data
-  },{ transaction: t })
-  return res
+    }
+  }, { transaction: t })
+  if (!a) {
+    let b = await sequelize.models.Project.create(data, { transaction: t })
+    return b
+  }
 }
 async function insertBuilding(list, t) {
   let res = await sequelize.models.Building.bulkCreate(list,    { transaction: t }
