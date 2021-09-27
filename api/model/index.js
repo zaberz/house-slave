@@ -161,6 +161,6 @@ const log = sequelize.define('Log', {
 })
 
 // sequelize.sync({force: true})
-sequelize.sync({alter: true})
+// sequelize.sync({alter: true})
 
 module.exports = sequelize

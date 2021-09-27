@@ -13,7 +13,7 @@ async function start() {
   let curLength = await sequelize.models.Licence.count()
   let count = await getTotalLicence()
   // let curLength = 0
-  // let count = 3154
+  // let count = 3155
   let delta = count - curLength
   console.log(curLength, count)
   while (delta > 0) {
@@ -32,9 +32,23 @@ async function start() {
     let projectInfo = await getProjectInfo(projectId)
     let buildingList = await getBuildingList(projectId, licenceId)
 
-    insertLicenceData(detail)
-    insertProject(projectInfo)
-    insertBuilding(buildingList)
+
+    // console.log('=====');
+    // console.log(detail);
+    // console.log(projectInfo);
+    // console.log(buildingList);
+    // console.log('=====');
+
+    let t = await sequelize.transaction();
+    try{
+      await insertBuilding(buildingList, t)
+      await insertProject(projectInfo, t)
+      await insertLicenceData(detail, t)
+      await t.commit();
+    }catch (e) {
+      await t.rollback();
+      throw e
+    }
 
     delta -= 1
   }
@@ -46,7 +60,7 @@ async function getTotalLicence() {
   let html = await cacheHtml(url, 'a0')
   let $ = cheerio.load(html)
   let info = $('body > table:nth-child(2) > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(33) > td')
-  let a = info.text()
+  let a = info.text().replace(',', '')
   let res = /查到记录共(\d+)条/.exec(a)
   let count = res[1]
   return count
@@ -63,10 +77,10 @@ async function getLicenceDetail(page, no) {
   data.licenceNo = $($(row).children().get(0)).text().trim()
   data.projectId = '' // $($(row).children().get(1)).text().trim()
   data.projectName = $($(row).children().get(1)).text().trim()
-  data.square = $($(row).children().get(2)).text().trim()
-  data.building = $($(row).children().get(3)).text().trim()
-  data.approvalDate = $($(row).children().get(4)).text().trim()
-  data.completionDate = $($(row).children().get(5)).text().trim()
+  data.square = $($(row).children().get(2)).text().trim().replace(',', '')
+  data.building = $($(row).children().get(3)).text().trim().replace(',', '')
+  data.approvalDate = new Date(  $($(row).children().get(4)).text().trim()).getTime() || null
+  data.completionDate = new Date( $($(row).children().get(5)).text().trim()).getTime() || null
 
   let a = $($(row).children().get(1)).find('a').attr()
   if (a) {
@@ -119,25 +133,26 @@ async function getProjectInfo(pid) {
 
   let $ = cheerio.load(html)
   let data = {}
+  data.projectId = pid
   data.name = $('body > table:nth-child(3) > tbody > tr > td > table:nth-child(2) > tbody > tr > td:nth-child(2) > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(1) > td:nth-child(2)').text()
   data.districtName = $('body > table:nth-child(3) > tbody > tr > td > table:nth-child(2) > tbody > tr > td:nth-child(2) > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(1) > td:nth-child(4)').text()
   data.address = $('body > table:nth-child(3) > tbody > tr > td > table:nth-child(2) > tbody > tr > td:nth-child(2) > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(2) > td:nth-child(2)').text()
   data.companyName = $('body > table:nth-child(3) > tbody > tr > td > table:nth-child(2) > tbody > tr > td:nth-child(2) > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td:nth-child(2)').text()
 
-  data.countSuite = $('#div1 > table > tbody > tr:nth-child(1) > td:nth-child(2)').text()
-  data.countArea = $('#div1 > table > tbody > tr:nth-child(1) > td:nth-child(4)').text()
-  data.countHouse = $('#div1 > table > tbody > tr:nth-child(1) > td:nth-child(6)').text()
-  data.countHouseArea = $('#div1 > table > tbody > tr:nth-child(1) > td:nth-child(8)').text()
+  data.countSuite = $('#div1 > table > tbody > tr:nth-child(1) > td:nth-child(2)').text().replace(',', '')
+  data.countArea = $('#div1 > table > tbody > tr:nth-child(1) > td:nth-child(4)').text().replace(',', '')
+  data.countHouse = $('#div1 > table > tbody > tr:nth-child(1) > td:nth-child(6)').text().replace(',', '')
+  data.countHouseArea = $('#div1 > table > tbody > tr:nth-child(1) > td:nth-child(8)').text().replace(',', '')
 
-  data.availCountSuite = $('#div1 > table > tbody > tr:nth-child(2) > td:nth-child(2)').text()
-  data.availCountArea = $('#div1 > table > tbody > tr:nth-child(2) > td:nth-child(4)').text()
-  data.availCountHouse = $('#div1 > table > tbody > tr:nth-child(2) > td:nth-child(6)').text()
-  data.availCountHouseArea = $('#div1 > table > tbody > tr:nth-child(2) > td:nth-child(8)').text()
+  data.availCountSuite = $('#div1 > table > tbody > tr:nth-child(2) > td:nth-child(2)').text().replace(',', '')
+  data.availCountArea = $('#div1 > table > tbody > tr:nth-child(2) > td:nth-child(4)').text().replace(',', '')
+  data.availCountHouse = $('#div1 > table > tbody > tr:nth-child(2) > td:nth-child(6)').text().replace(',', '')
+  data.availCountHouseArea = $('#div1 > table > tbody > tr:nth-child(2) > td:nth-child(8)').text().replace(',', '')
 
-  data.soldCountSuite = $('#div1 > table > tbody > tr:nth-child(4) > td:nth-child(2)').text()
-  data.soldCountArea = $('#div1 > table > tbody > tr:nth-child(4) > td:nth-child(4)').text()
-  data.soldCountHouse = $('#div1 > table > tbody > tr:nth-child(4) > td:nth-child(6)').text()
-  data.soldCountHouseArea = $('#div1 > table > tbody > tr:nth-child(4) > td:nth-child(8)').text()
+  data.soldCountSuite = $('#div1 > table > tbody > tr:nth-child(4) > td:nth-child(2)').text().replace(',', '')
+  data.soldCountArea = $('#div1 > table > tbody > tr:nth-child(4) > td:nth-child(4)').text().replace(',', '')
+  data.soldCountHouse = $('#div1 > table > tbody > tr:nth-child(4) > td:nth-child(6)').text().replace(',', '')
+  data.soldCountHouseArea = $('#div1 > table > tbody > tr:nth-child(4) > td:nth-child(8)').text().replace(',', '')
   data.isSoldout = data.availCountSuite == 0
 
   return data
@@ -173,16 +188,23 @@ async function getBuildingList(projectId, licenceId) {
 }
 
 
-async function insertLicenceData(data) {
-  let res = await sequelize.models.Licence.create(data)
+async function insertLicenceData(data, t) {
+  let res = await sequelize.models.Licence.create(data, { transaction: t }
+  )
   return res
 }
-async function insertProject(data) {
-  let res = await sequelize.models.Project.create(data)
+async function insertProject(data,t) {
+  let res = await sequelize.models.Project.findOrCreate({
+    where: {
+      projectId: data.projectId
+    },
+    defaults: data
+  },{ transaction: t })
   return res
 }
-async function insertBuilding(list) {
-  let res = await sequelize.models.Building.bulkCreate(list)
+async function insertBuilding(list, t) {
+  let res = await sequelize.models.Building.bulkCreate(list,    { transaction: t }
+  )
   return res
 }
 
