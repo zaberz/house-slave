@@ -13,7 +13,6 @@ app.get("/api", (req, res) => {
   });
 });
 
-console.log(1);
 app.use("/api/crawl", router);
 
 app.listen(9000);

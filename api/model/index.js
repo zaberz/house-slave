@@ -6,6 +6,8 @@ let dbUser = process.env.DBUSER
 let dbPWD = process.env.DBPWD
 let dbHost = process.env.DBHOST
 let dbPort = process.env.DBPORT
+
+
 const sequelize = new Sequelize(dbName, dbUser, dbPWD, {
   host: dbHost,
   port: dbPort,
@@ -43,16 +45,17 @@ const DailyAvailable = sequelize.define('DailyAvailable', {
 
 // DailyAvailable.sync({alter: true})
 
-const Project = sequelize.define('Project', {
+const Licence = sequelize.define('Licence', {
   licenceNo: {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true
   },
-  projectRealId: DataTypes.STRING,
-  projectId: {
+  licenceId: {
     type: DataTypes.STRING,
+    unique: true
   },
+  projectId: DataTypes.STRING,
   projectName: {
     type: DataTypes.STRING,
   },
@@ -69,10 +72,8 @@ const Project = sequelize.define('Project', {
     type: DataTypes.DATE,
   }
 })
-// Project.sync({alter: true})
 
-const ProjectDetail = sequelize.define('ProjectDetail', {
-  date: DataTypes.DATE,
+const Project = sequelize.define('Project', {
   projectId: {
     type:DataTypes.STRING,
     unique: true
@@ -106,6 +107,50 @@ const ProjectDetail = sequelize.define('ProjectDetail', {
 })
 // ProjectDetail.sync({alter: true})
 
+const Building = sequelize.define('Building',{
+  projectId: DataTypes.STRING,
+  buildingId: DataTypes.STRING,
+  buildingName: DataTypes.STRING,
+  isInit: DataTypes.BOOLEAN,
+  isSoldout: DataTypes.BOOLEAN
+})
+
+const House = sequelize.define('House', {
+  projectId: DataTypes.STRING,
+  buildingId: DataTypes.STRING,
+  houseId: DataTypes.STRING,
+
+  floor: DataTypes.STRING,
+  houseName: DataTypes.STRING,
+  type: DataTypes.STRING,
+
+  pBuildingSquare: DataTypes.FLOAT,
+  pInsideSquare: DataTypes.FLOAT,
+  pShareSquare: DataTypes.FLOAT,
+
+  state: DataTypes.INTEGER, // 0 可售 1 已售 2其他
+  unitPrice: DataTypes.FLOAT,
+  totalPrice: DataTypes.FLOAT,
+//
+//   名义层/实际层	/6
+// 室号	601单元
+// 房屋类型	住宅
+// 房型
+// 预测建筑面积	140.89
+// 预测套内面积	111.53
+// 预测分摊面积	29.36
+// 预测地下面积
+// 实测建筑面积
+// 实测套内面积
+// 实测分摊面积
+// 实测地下面积
+// 状态	可售
+// 单价	35662.05
+// 总价	5024426.2245
+
+})
+
+
 const log = sequelize.define('Log', {
   tag: {
     type: DataTypes.STRING
@@ -116,6 +161,6 @@ const log = sequelize.define('Log', {
 })
 
 // sequelize.sync({force: true})
-// sequelize.sync({alter: true})
+sequelize.sync({alter: true})
 
 module.exports = sequelize

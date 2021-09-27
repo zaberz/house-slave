@@ -1,6 +1,20 @@
 const express = require('express')
 const {getProjectInfo, getDailySale, getDailyAvail,getProjectDetail} = require('../controller/crawl')
+const {start} = require('../controller/start')
 const router = express.Router()
+
+router.get('/start', async function (req, res) {
+  start()
+  res.send({
+    msg: 'success111'
+  })
+})
+
+
+
+
+
+
 
 router.get('/projectInfo', async function (req, res) {
   let html = await getProjectInfo()
