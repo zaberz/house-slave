@@ -5,6 +5,7 @@ const fse = require('fs-extra')
 const dayjs = require('dayjs')
 const urllib = require("url");
 const {encodeBase64, decodeBase64} = require('../utils/strUtil')
+const {Op} = require('sequelize')
 
 async function getHouseByBuilding() {
   let buildingInfo = await sequelize.models.Building.findOne({
@@ -56,9 +57,9 @@ async function getList (buildingInfo) {
     let countHouse = $(floor).children().length
     for (let i =1; i< countHouse;i++) {
       let data = {
-        // licenceId,
-        // projectId,
-        // buildingId,
+        licenceId,
+        projectId,
+        buildingId,
       }
       data.floor = floorNum
       let houseDom = $($(floor).children().get(i))
@@ -70,16 +71,16 @@ async function getList (buildingInfo) {
         data.houseId = decodeBase64( urlInfo.query.Param).split('|')[0] || ''
       }
       let statusMap = {
-        '#FF3399': '已签',
-        '#FF0000': '已登记',
-        '#00FF00': '可售',
-        '#9999FF': '抵押',
-        '#FFFF00': '限制',
-        '#FFFFFF': '未纳入网上销售',
+        '#FF3399': 1, // '已签',
+        '#FF0000': 2, // '已登记',
+        '#00FF00': 3, // '可售',
+        '#9999FF': 4, // '抵押',
+        '#FFFF00': 5, // '限制',
+        '#FFFFFF': 6, // '未纳入网上销售',
       }
       // 1422360|151872
       let bgcolor = houseDom.attr().bgcolor
-      data.status = statusMap[bgcolor] || '未知'
+      data.state = statusMap[bgcolor] || -1 // '未知'
       let title = houseDom.attr().title
       let regx = /([\d\.])+/g
       let res = title.match(regx)
@@ -93,13 +94,50 @@ async function getList (buildingInfo) {
   return list
 }
 
+async function getHouseDetail() {
+  let houseInfo = {}
+  // let houseInfo = await sequelize.models.House.findOne({
+  //   where: {
+  //     [Op.and]: [
+  //       {isInit: false},
+  //       {houseId: {
+  //         [Op.not]: null}
+  //       },
+  //       {projectId: {
+  //           [Op.not]: null}
+  //       },
+  //     ]
+  //   },
+  //   offset: 0,
+  //   limit: 1
+  // })
+  // let {projectId, buildingId, licenceId, houseId} = houseInfo
+  // let pstr = encodeBase64(projectId)
+  // let param = encodeBase64(`${houseId}|${buildingId}`)
+  // let url = `http://222.77.178.63:7002/housedetail.asp?ProjectID=${pstr}&ProjectName=&PreSell_ID=${licenceId}&Start_ID=${licenceId}&bname=&room=&Param=${param}`
+  let url = 'http://222.77.178.63:7002/housedetail.asp?ProjectID=LTk5OTk5Mjc1&ProjectName=&PreSell_ID=-99998664&Start_ID=-99998664&bname=&room=&Param=MTYzMzczOHwxNTAzNzc='
+  let html = await cacheHtml(url, 'a12')
+  let $ = cheerio.load(html)
+  // data.floor = $('#Table1 > tbody > tr > td > table > tbody > tr:nth-child(2) > td:nth-child(2)').text().trim().split('/')[1]
+  houseInfo.type = $('#Table1 > tbody > tr > td > table > tbody > tr:nth-child(4) > td:nth-child(2)').text().trim()
+  houseInfo.pInsideSquare = $('#Table1 > tbody > tr > td > table > tbody > tr:nth-child(7) > td:nth-child(2)').text().trim()
+  houseInfo.pShareSquare = $('#Table1 > tbody > tr > td > table > tbody > tr:nth-child(8) > td:nth-child(2)').text().trim()
+  houseInfo.unitPrice = $('#Table1 > tbody > tr > td > table > tbody > tr:nth-child(15) > td:nth-child(2)').text().trim()
+  houseInfo.totalPrice = $('#Table1 > tbody > tr > td > table > tbody > tr:nth-child(16) > td:nth-child(2)').text().trim()
+  houseInfo.isInit = true
+  console.log(houseInfo)
+}
+
+
+
 async function cacheHtml(url, fileName) {
-  let html = await gbkRequest({url})
-  fse.outputFile(`./${fileName}.html`,  html)
-  // let html = await fse.readFile(`./${fileName}.html`, 'utf-8')
+  // let html = await gbkRequest({url})
+  // fse.outputFile(`./${fileName}.html`,  html)
+  let html = await fse.readFile(`./${fileName}.html`, 'utf-8')
   return html
 }
 
 module.exports = {
-  getHouseByBuilding
+  getHouseByBuilding,
+  getHouseDetail
 }

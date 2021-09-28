@@ -1,6 +1,6 @@
 const express = require('express')
 const {getProjectInfo, getDailySale, getDailyAvail,getProjectDetail} = require('../controller/crawl')
-const {getHouseByBuilding} = require('../controller/getHouse')
+const {getHouseByBuilding, getHouseDetail} = require('../controller/getHouse')
 const {start} = require('../controller/start')
 const router = express.Router()
 
@@ -13,6 +13,13 @@ router.get('/start', async function (req, res) {
 
 router.get('/inithouse', async (req, res) => {
   getHouseByBuilding()
+  res.send({
+    msg: 'success'
+  })
+})
+
+router.get('/housedetail', async (req, res)=> {
+  getHouseDetail()
   res.send({
     msg: 'success'
   })

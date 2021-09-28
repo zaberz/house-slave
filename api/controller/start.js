@@ -66,10 +66,23 @@ async function getTotalLicence() {
   return count
 }
 
+let cachedPage = ''
+let lastPage = ''
+
 async function getLicenceDetail(page, no) {
+
   let offset = 3
   let url = `http://222.77.178.63:7002/result_new.asp?page2=${page}&xm_search=&zl_search=&gs_search=&pzs_search=&pzx_search=&SelectXZQ=&SelectBK=`
-  let html = await cacheHtml(url, 'a1')
+
+  let html = ''
+  if (page !== lastPage) {
+    html = await cacheHtml(url, 'a1')
+    cachedPage = html
+  }else {
+    html = cachedPage
+  }
+  lastPage = page
+
   let $ = cheerio.load(html)
   let tbody = $('body > table:nth-child(2) > tbody > tr:nth-child(2) > td > table > tbody')
   let row = tbody.children().get(offset - 1 + no * 2 -1)
