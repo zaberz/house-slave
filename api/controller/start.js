@@ -121,8 +121,6 @@ async function getLicenceId(projectId, licenceNo) {
   return false
 }
 
-
-
 async function getProjectInfo(pid) {
   let t = dayjs().format('YYYY-M-DD|mm')
   let pstr = `${pid}|${t}`
@@ -175,6 +173,7 @@ async function getBuildingList(projectId, licenceId) {
     }
     data.isInit = false
     data.isSoldout = false
+    data.licenceId = licenceId
     data.projectId = projectId
     data.buildingName = $(row.children().get(0)).text().trim()
     let href = row.find('a').attr().href

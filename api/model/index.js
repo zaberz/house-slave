@@ -108,6 +108,7 @@ const Project = sequelize.define('Project', {
 // ProjectDetail.sync({alter: true})
 
 const Building = sequelize.define('Building',{
+  licenceId: DataTypes.STRING,
   projectId: DataTypes.STRING,
   buildingId: DataTypes.STRING,
   buildingName: DataTypes.STRING,
@@ -115,7 +116,9 @@ const Building = sequelize.define('Building',{
   isSoldout: DataTypes.BOOLEAN
 })
 
+// Building.sync({alter: true})
 const House = sequelize.define('House', {
+  licenceId: DataTypes.STRING,
   projectId: DataTypes.STRING,
   buildingId: DataTypes.STRING,
   houseId: DataTypes.STRING,
@@ -128,9 +131,14 @@ const House = sequelize.define('House', {
   pInsideSquare: DataTypes.FLOAT,
   pShareSquare: DataTypes.FLOAT,
 
+  // reality
+  rBuildingSquare: DataTypes.FLOAT,
+
   state: DataTypes.INTEGER, // 0 可售 1 已售 2其他
   unitPrice: DataTypes.FLOAT,
   totalPrice: DataTypes.FLOAT,
+
+  isInit: DataTypes.BOOLEAN
 //
 //   名义层/实际层	/6
 // 室号	601单元
@@ -149,7 +157,7 @@ const House = sequelize.define('House', {
 // 总价	5024426.2245
 
 })
-
+// House.sync({alter: true})
 
 const log = sequelize.define('Log', {
   tag: {
