@@ -134,25 +134,25 @@ async function getProjectInfo(pid) {
   let $ = cheerio.load(html)
   let data = {}
   data.projectId = pid
-  data.name = $('body > table:nth-child(3) > tbody > tr > td > table:nth-child(2) > tbody > tr > td:nth-child(2) > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(1) > td:nth-child(2)').text()
-  data.districtName = $('body > table:nth-child(3) > tbody > tr > td > table:nth-child(2) > tbody > tr > td:nth-child(2) > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(1) > td:nth-child(4)').text()
-  data.address = $('body > table:nth-child(3) > tbody > tr > td > table:nth-child(2) > tbody > tr > td:nth-child(2) > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(2) > td:nth-child(2)').text()
-  data.companyName = $('body > table:nth-child(3) > tbody > tr > td > table:nth-child(2) > tbody > tr > td:nth-child(2) > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td:nth-child(2)').text()
+  data.name = $('body > table:nth-child(3) > tbody > tr > td > table:nth-child(2) > tbody > tr > td:nth-child(2) > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(1) > td:nth-child(2)').text().trim() || '不公开'
+  data.districtName = $('body > table:nth-child(3) > tbody > tr > td > table:nth-child(2) > tbody > tr > td:nth-child(2) > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(1) > td:nth-child(4)').text().trim() || ''
+  data.address = $('body > table:nth-child(3) > tbody > tr > td > table:nth-child(2) > tbody > tr > td:nth-child(2) > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(2) > td:nth-child(2)').text().trim() || ''
+  data.companyName = $('body > table:nth-child(3) > tbody > tr > td > table:nth-child(2) > tbody > tr > td:nth-child(2) > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td:nth-child(2)').text().trim() || ''
 
-  data.countSuite = $('#div1 > table > tbody > tr:nth-child(1) > td:nth-child(2)').text().replace(',', '')
-  data.countArea = $('#div1 > table > tbody > tr:nth-child(1) > td:nth-child(4)').text().replace(',', '')
-  data.countHouse = $('#div1 > table > tbody > tr:nth-child(1) > td:nth-child(6)').text().replace(',', '')
-  data.countHouseArea = $('#div1 > table > tbody > tr:nth-child(1) > td:nth-child(8)').text().replace(',', '')
+  data.countSuite = $('#div1 > table > tbody > tr:nth-child(1) > td:nth-child(2)').text().trim().replace(',', '') || 0
+  data.countArea = $('#div1 > table > tbody > tr:nth-child(1) > td:nth-child(4)').text().trim().replace(',', '') || 0
+  data.countHouse = $('#div1 > table > tbody > tr:nth-child(1) > td:nth-child(6)').text().trim().replace(',', '') || 0
+  data.countHouseArea = $('#div1 > table > tbody > tr:nth-child(1) > td:nth-child(8)').text().trim().replace(',', '') || 0
 
-  data.availCountSuite = $('#div1 > table > tbody > tr:nth-child(2) > td:nth-child(2)').text().replace(',', '')
-  data.availCountArea = $('#div1 > table > tbody > tr:nth-child(2) > td:nth-child(4)').text().replace(',', '')
-  data.availCountHouse = $('#div1 > table > tbody > tr:nth-child(2) > td:nth-child(6)').text().replace(',', '')
-  data.availCountHouseArea = $('#div1 > table > tbody > tr:nth-child(2) > td:nth-child(8)').text().replace(',', '')
+  data.availCountSuite = $('#div1 > table > tbody > tr:nth-child(2) > td:nth-child(2)').text().trim().replace(',', '') || 0
+  data.availCountArea = $('#div1 > table > tbody > tr:nth-child(2) > td:nth-child(4)').text().trim().replace(',', '') || 0
+  data.availCountHouse = $('#div1 > table > tbody > tr:nth-child(2) > td:nth-child(6)').text().trim().replace(',', '') || 0
+  data.availCountHouseArea = $('#div1 > table > tbody > tr:nth-child(2) > td:nth-child(8)').text().trim().replace(',', '') || 0
 
-  data.soldCountSuite = $('#div1 > table > tbody > tr:nth-child(4) > td:nth-child(2)').text().replace(',', '')
-  data.soldCountArea = $('#div1 > table > tbody > tr:nth-child(4) > td:nth-child(4)').text().replace(',', '')
-  data.soldCountHouse = $('#div1 > table > tbody > tr:nth-child(4) > td:nth-child(6)').text().replace(',', '')
-  data.soldCountHouseArea = $('#div1 > table > tbody > tr:nth-child(4) > td:nth-child(8)').text().replace(',', '')
+  data.soldCountSuite = $('#div1 > table > tbody > tr:nth-child(4) > td:nth-child(2)').text().trim().replace(',', '') || 0
+  data.soldCountArea = $('#div1 > table > tbody > tr:nth-child(4) > td:nth-child(4)').text().trim().replace(',', '') || 0
+  data.soldCountHouse = $('#div1 > table > tbody > tr:nth-child(4) > td:nth-child(6)').text().trim().replace(',', '') || 0
+  data.soldCountHouseArea = $('#div1 > table > tbody > tr:nth-child(4) > td:nth-child(8)').text().trim().replace(',', '') || 0
   data.isSoldout = data.availCountSuite == 0
 
   return data
