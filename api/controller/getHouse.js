@@ -96,44 +96,63 @@ async function getList (buildingInfo) {
 
 async function getHouseDetail() {
   let houseInfo = {}
-  // let houseInfo = await sequelize.models.House.findOne({
-  //   where: {
-  //     [Op.and]: [
-  //       {isInit: false},
-  //       {houseId: {
-  //         [Op.not]: null}
-  //       },
-  //       {projectId: {
-  //           [Op.not]: null}
-  //       },
-  //     ]
-  //   },
-  //   offset: 0,
-  //   limit: 1
-  // })
-  // let {projectId, buildingId, licenceId, houseId} = houseInfo
-  // let pstr = encodeBase64(projectId)
-  // let param = encodeBase64(`${houseId}|${buildingId}`)
-  // let url = `http://222.77.178.63:7002/housedetail.asp?ProjectID=${pstr}&ProjectName=&PreSell_ID=${licenceId}&Start_ID=${licenceId}&bname=&room=&Param=${param}`
-  let url = 'http://222.77.178.63:7002/housedetail.asp?ProjectID=LTk5OTk5Mjc1&ProjectName=&PreSell_ID=-99998664&Start_ID=-99998664&bname=&room=&Param=MTYzMzczOHwxNTAzNzc='
-  let html = await cacheHtml(url, 'a12')
-  let $ = cheerio.load(html)
-  // data.floor = $('#Table1 > tbody > tr > td > table > tbody > tr:nth-child(2) > td:nth-child(2)').text().trim().split('/')[1]
-  houseInfo.type = $('#Table1 > tbody > tr > td > table > tbody > tr:nth-child(4) > td:nth-child(2)').text().trim()
-  houseInfo.pInsideSquare = $('#Table1 > tbody > tr > td > table > tbody > tr:nth-child(7) > td:nth-child(2)').text().trim()
-  houseInfo.pShareSquare = $('#Table1 > tbody > tr > td > table > tbody > tr:nth-child(8) > td:nth-child(2)').text().trim()
-  houseInfo.unitPrice = $('#Table1 > tbody > tr > td > table > tbody > tr:nth-child(15) > td:nth-child(2)').text().trim()
-  houseInfo.totalPrice = $('#Table1 > tbody > tr > td > table > tbody > tr:nth-child(16) > td:nth-child(2)').text().trim()
-  houseInfo.isInit = true
-  console.log(houseInfo)
+  houseInfo = await sequelize.models.House.findOne({
+    where: {
+      [Op.and]: [
+        {isInit: false},
+        {houseId: {
+          [Op.not]: null}
+        },
+        {projectId: {
+            [Op.not]: null}
+        },
+      ]
+    },
+    offset: 0,
+    limit: 1
+  })
+  while (houseInfo) {
+    let {projectId, buildingId, licenceId, houseId} = houseInfo
+    let pstr = encodeBase64(projectId)
+    let param = encodeBase64(`${houseId}|${buildingId}`)
+    let url = `http://222.77.178.63:7002/housedetail.asp?ProjectID=${pstr}&ProjectName=&PreSell_ID=${licenceId}&Start_ID=${licenceId}&bname=&room=&Param=${param}`
+    // let url = 'http://222.77.178.63:7002/housedetail.asp?ProjectID=LTk5OTk5Mjc1&ProjectName=&PreSell_ID=-99998664&Start_ID=-99998664&bname=&room=&Param=MTYzMzczOHwxNTAzNzc='
+    let html = await cacheHtml(url, 'a12')
+    let $ = cheerio.load(html)
+    // data.floor = $('#Table1 > tbody > tr > td > table > tbody > tr:nth-child(2) > td:nth-child(2)').text().trim().split('/')[1]
+    houseInfo.type = $('#Table1 > tbody > tr > td > table > tbody > tr:nth-child(4) > td:nth-child(2)').text().trim()
+    houseInfo.pInsideSquare = $('#Table1 > tbody > tr > td > table > tbody > tr:nth-child(7) > td:nth-child(2)').text().trim() || 0
+    houseInfo.pShareSquare = $('#Table1 > tbody > tr > td > table > tbody > tr:nth-child(8) > td:nth-child(2)').text().trim() || 0
+    houseInfo.unitPrice = $('#Table1 > tbody > tr > td > table > tbody > tr:nth-child(15) > td:nth-child(2)').text().trim() || 0
+    houseInfo.totalPrice = $('#Table1 > tbody > tr > td > table > tbody > tr:nth-child(16) > td:nth-child(2)').text().trim() || 0
+    houseInfo.isInit = true
+    await houseInfo.save()
+
+    houseInfo = await sequelize.models.House.findOne({
+      where: {
+        [Op.and]: [
+          {isInit: false},
+          {houseId: {
+              [Op.not]: null}
+          },
+          {projectId: {
+              [Op.not]: null}
+          },
+        ]
+      },
+      offset: 0,
+      limit: 1
+    })
+
+  }
 }
 
 
 
 async function cacheHtml(url, fileName) {
-  // let html = await gbkRequest({url})
-  // fse.outputFile(`./${fileName}.html`,  html)
-  let html = await fse.readFile(`./${fileName}.html`, 'utf-8')
+  let html = await gbkRequest({url})
+  fse.outputFile(`./${fileName}.html`,  html)
+  // let html = await fse.readFile(`./${fileName}.html`, 'utf-8')
   return html
 }
 
