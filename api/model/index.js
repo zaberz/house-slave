@@ -12,7 +12,7 @@ const sequelize = new Sequelize(dbName, dbUser, dbPWD, {
   host: dbHost,
   port: dbPort,
   dialect: 'postgres',
-  logging: false
+  // logging: false
 })
 
 const District = sequelize.define('District', {
