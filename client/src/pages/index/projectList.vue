@@ -55,6 +55,8 @@ export default {
     pickerChangeHandler(e) {
       let i = e.detail.value
       this.selectDistrictIndex = i
+      this.queryData.district = this.districts[this.selectDistrictIndex].name
+      this.search()
     },
   }
 }
@@ -80,5 +82,9 @@ export default {
     color: $uni-color-primary;
     text-align: center;
   }
+}
+
+.list{
+  padding-bottom: 20rpx;
 }
 </style>

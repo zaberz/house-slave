@@ -14,7 +14,6 @@ async function gbkRequest(option) {
     res.data.on('end', () => {
       const buffer = Buffer.concat(chunks)
       const str = iconv.decode(buffer, 'gbk')
-      console.log(str)
       resolve(str)
     })
   })

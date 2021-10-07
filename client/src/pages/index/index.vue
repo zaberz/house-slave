@@ -42,7 +42,7 @@
         </view>
 
         <view class="item">
-          <view class="num">{{todayAvail.square}}m²</view>
+          <view class="num">{{todayAvail.square}}万m²</view>
           <view class="text">总面积</view>
         </view>
       </view>
@@ -112,6 +112,7 @@ export default {
     line-height: 2;
     color: $uni-color-primary;
     text-align: center;
+    margin-top: 20rpx;
   }
   .search-btn{
     @include border-radius;

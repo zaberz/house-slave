@@ -16,7 +16,6 @@ export function todayavail() {
   })
 }
 export function searchproject(params) {
-  console.log(params)
   return request({
     url: '/searchproject',
     params

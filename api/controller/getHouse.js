@@ -108,11 +108,13 @@ async function getHouseDetail() {
         },
       ]
     },
+    order: [['id', 'DESC']],
     offset: 0,
     limit: 1
   })
   while (houseInfo) {
     let {projectId, buildingId, licenceId, houseId} = houseInfo
+    console.log('start houseId', houseId, 'id:', houseInfo.id)
     let pstr = encodeBase64(projectId)
     let param = encodeBase64(`${houseId}|${buildingId}`)
     let url = `http://222.77.178.63:7002/housedetail.asp?ProjectID=${pstr}&ProjectName=&PreSell_ID=${licenceId}&Start_ID=${licenceId}&bname=&room=&Param=${param}`

@@ -39,4 +39,5 @@ router.get('/building/:buildingId', async (req, res) => {
   res.json(data)
 })
 
+
 module.exports = router

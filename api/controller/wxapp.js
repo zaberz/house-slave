@@ -22,7 +22,7 @@ async function getProjectBySearch(query) {
     // offset: '',
     limit: 10,
     page: 1,
-    districtName: "鼓楼区"
+    district: "鼓楼区"
   }
   query = {
     ...defaultQuery,
@@ -30,7 +30,7 @@ async function getProjectBySearch(query) {
   }
   let res = await sequelize.models.Project.findAndCountAll({
     where: {
-      districtName: query.districtName
+      districtName: query.district
     },
     limit: query.limit,
     offset: (query.page -1)* query.limit,
