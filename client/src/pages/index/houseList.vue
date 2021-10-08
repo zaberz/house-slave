@@ -75,7 +75,7 @@ export default {
 .floor{
   display: flex;
   align-items: center;
-  margin-bottom: 20rpx;
+  //margin-bottom: 20rpx;
   font-size: 24rpx;
   .floor-num{
     width: 80rpx;
@@ -94,10 +94,11 @@ export default {
     //flex-wrap: nowrap;
     overflow-x: auto;
     white-space: nowrap;
+    padding: 20rpx 0;
     .house-list-item{
       @include card;
       margin-right: 20rpx;
-      width: 200rpx;
+      width: 240rpx;
       display: inline-block;
       padding: 10rpx;
       .title{
