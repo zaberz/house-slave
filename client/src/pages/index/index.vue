@@ -72,7 +72,6 @@ export default {
     async initTodaySale() {
       let a = await todaysale()
       this.todaySale = a.detail.find(item => item.area === '合计')
-      console.log(a)
     },
     async initTodayAvail() {
       let a = await todayavail()

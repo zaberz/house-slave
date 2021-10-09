@@ -1,10 +1,17 @@
 <template>
   <view class="page">
     <view class="header">
-      <view></view>
+      <view style="display: flex;align-items: center">
+        <view style="margin-right: 20rpx">只看可售</view>
+        <switch v-model="filterStatus.state"></switch>
+      </view>
+      <view style="display: flex;align-items: center">
+        <view style="margin-right: 20rpx">只看住宅</view>
+        <switch v-model="filterStatus.type"></switch>
+      </view>
     </view>
     <view>
-      <view v-for="(floor) in floorList" class="floor">
+      <view v-for="(floor) in filteredList" class="floor">
         <view class="floor-num">{{floor.floor}}</view>
         <view class="house-list">
           <view class="house-list-item" v-for="house in floor.list" :disabled="house.state !== 3">
@@ -33,28 +40,48 @@ export default {
   data() {
     return {
       buildingInfo: {},
-      floorList: [],
-      statusMap
+      houseList: [],
+      statusMap,
+      filterStatus: {
+        state: '',
+        type: ''
+      }
+    }
+  },
+  computed: {
+    filteredList() {
+      let floorList = []
+      let filtedList = this.houseList.filter(item=> {
+        if (this.filterStatus.state && item.state !== 3) {
+          return false
+        }
+        if (this.filterStatus.type && item.type !== '住宅') {
+          return false
+        }
+      })
+      filtedList.forEach(item=> {
+        let floor = floorList.find(floorDetail => floorDetail.floor === item.floor)
+        if (!floor) {
+          floor = {
+            floor: item.floor,
+            list: [item]
+          }
+          floorList.push(floor)
+        }else{
+          floor.list.push(item)
+        }
+      })
+      floorList = floorList.sort((a,b)=> b.floor - a.floor)
+      console.log(floorList)
+      return floorList
     }
   },
   methods: {
     async getHouseList(bid) {
       let a = await building(bid)
       this.buildingInfo = a.buildingInfo
-      a.houseList.forEach(item=> {
-        let floor = this.floorList.find(floorDetail => floorDetail.floor === item.floor)
-        if (!floor) {
-          floor = {
-            floor: item.floor,
-            list: [item]
-          }
-          this.floorList.push(floor)
-        }else{
-          floor.list.push(item)
-        }
-      })
-      this.floorList = this.floorList.sort((a,b)=> b.floor - a.floor)
-    }
+      this.houseList = a.houseList
+    },
   }
 }
 
@@ -71,6 +98,10 @@ export default {
 .header{
   @include card;
   margin: 20rpx;
+  display: flex;
+  padding: 20rpx;
+  justify-content: space-between;
+  align-items: center;
 }
 .floor{
   display: flex;

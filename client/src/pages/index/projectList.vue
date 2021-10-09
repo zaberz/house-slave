@@ -5,21 +5,22 @@
         <picker @change="pickerChangeHandler" :value="selectDistrictIndex" :range="districts" range-key="name" style="flex: 1">
             <view class="picker-view" style="flex: 1;">{{districts[selectDistrictIndex] ? districts[selectDistrictIndex].name: ''}}</view>
         </picker>
-        <view class="picker-view" style="width: 160rpx;margin-left: 20rpx">搜索</view>
+        <view class="picker-view" style="width: 160rpx;margin-left: 20rpx" @click="searchHandler">搜索</view>
       </view>
 
       <view class="filter-label">
         价格
-        <input type="number" class="filter-input">元至
-        <input type="number" class="filter-input">元
+        <input type="number" class="filter-input" v-model="queryData.minPrice">元至
+        <input type="number" class="filter-input" v-model="queryData.maxPrice">元
       </view>
       <view class="filter-label">
         面积
-        <input type="number" class="filter-input">m²至
-        <input type="number" class="filter-input">m²
+        <input type="number" class="filter-input" v-model="queryData.minSize">m²至
+        <input type="number" class="filter-input" v-model="queryData.maxSize">m²
       </view>
 
     </view>
+    <view style="padding-left: 20rpx">找到{{total}}个楼盘</view>
     <view class="list">
       <projectItem v-for="item in list" :key="item.id" :project-item="item"></projectItem>
     </view>
@@ -54,6 +55,10 @@ export default {
       queryData: {
         district: '鼓楼区',
         page: 1,
+        minPrice: 0,
+        maxPrice: 99999999,
+        minSize: 0,
+        maxSize: 99999999
       },
       list: [],
       total: -1
@@ -66,6 +71,11 @@ export default {
     },
     hideLoading() {
       uni.hideLoading()
+    },
+    searchHandler() {
+      this.total = -1
+      this.queryData.page = 1
+      this.search()
     },
     async search(){
       if (this.total === -1 || this.total > this.list.length) {
@@ -85,6 +95,7 @@ export default {
       this.selectDistrictIndex = i
       this.queryData.district = this.districts[this.selectDistrictIndex].name
       this.queryData.page = 1
+      this.total = -1
       this.search()
     },
   }
