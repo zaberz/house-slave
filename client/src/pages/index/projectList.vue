@@ -36,6 +36,8 @@ export default {
   components: {projectItem},
   onLoad(query) {
     let d = query.d
+    d = decodeURIComponent(d)
+
     if (d) {
       this.selectDistrictIndex = this.districts.findIndex(item => item && item.name === d)
       if(this.selectDistrictIndex> -1){  this.queryData.district = this.districts[this.selectDistrictIndex].name || ''}
@@ -62,7 +64,12 @@ export default {
       },
       list: [],
       total: -1
+    }
+  },
 
+  onShareAppMessage() {
+    return {
+      title: '福州房产'
     }
   },
   methods: {

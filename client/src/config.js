@@ -5,7 +5,8 @@ const CONFIG = {
   // #endif
 
   //  #ifdef MP-WEIXIN
-  DOMAIN: 'http://localhost:9000/api/wxapp/',
+  // DOMAIN: 'http://localhost:9000/api/wxapp/',
+  DOMAIN: 'https://house.ruaaaa.com/api/wxapp',
   // DOMAIN: 'https://forus.ruaaaa.com/api/wxapp/',
   // DOMAIN: 'http://192.168.2.232:9000/api/',
 

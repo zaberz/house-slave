@@ -22,10 +22,10 @@
           <view class="num">{{todaySale.square}}m²</view>
           <view class="text">成交面积</view>
         </view>
-        <view class="item">
-          <view class="num">{{todaySale.square}}</view>
-          <view class="text">成交面积</view>
-        </view>
+<!--        <view class="item">-->
+<!--          <view class="num">{{todaySale.square}}</view>-->
+<!--          <view class="text">成交面积</view>-->
+<!--        </view>-->
       </view>
 
     </view>
@@ -62,6 +62,12 @@ export default {
       selectDistrictIndex:0,
       todaySale: {},
       todayAvail: {}
+    }
+  },
+
+  onShareAppMessage() {
+    return {
+      title: '福州房产'
     }
   },
   onLoad() {

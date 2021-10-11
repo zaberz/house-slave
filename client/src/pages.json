@@ -3,31 +3,28 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "test"
+				"navigationBarTitleText": "福州房产"
 			}
 		},{
 			"path": "pages/index/projectList",
 			"style": {
-				"navigationBarTitleText": "test"
+				"navigationBarTitleText": "福州房产"
 			}
 		},{
 			"path": "pages/index/buildingList",
 			"style": {
-				"navigationBarTitleText": "test"
+				"navigationBarTitleText": "福州房产"
 			}
 		},{
 			"path": "pages/index/houseList",
 			"style": {
-				"navigationBarTitleText": "test"
+				"navigationBarTitleText": "福州房产"
 			}
 		}
-
-
-
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
+		"navigationBarTitleText": "福州房产",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	}

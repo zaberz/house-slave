@@ -3,11 +3,11 @@
     <view class="header">
       <view style="display: flex;align-items: center">
         <view style="margin-right: 20rpx">只看可售</view>
-        <switch v-model="filterStatus.state"></switch>
+        <switch @change="stateChangeHandler"></switch>
       </view>
       <view style="display: flex;align-items: center">
         <view style="margin-right: 20rpx">只看住宅</view>
-        <switch v-model="filterStatus.type"></switch>
+        <switch @change="typeChangeHandler"></switch>
       </view>
     </view>
     <view>
@@ -37,6 +37,12 @@ export default {
     let buildingId = opt.bid
     this.getHouseList(buildingId)
   },
+
+  onShareAppMessage() {
+    return {
+      title: '福州房产'
+    }
+  },
   data() {
     return {
       buildingInfo: {},
@@ -58,6 +64,7 @@ export default {
         if (this.filterStatus.type && item.type !== '住宅') {
           return false
         }
+        return true
       })
       filtedList.forEach(item=> {
         let floor = floorList.find(floorDetail => floorDetail.floor === item.floor)
@@ -82,6 +89,12 @@ export default {
       this.buildingInfo = a.buildingInfo
       this.houseList = a.houseList
     },
+    stateChangeHandler(e) {
+      this.filterStatus.state = e.target.value
+    },
+    typeChangeHandler(e) {
+      this.filterStatus.type = e.target.value
+    }
   }
 }
 

@@ -41,6 +41,11 @@ export default {
       buildings: []
     }
   },
+  onShareAppMessage() {
+    return {
+      title: '福州房产'
+    }
+  },
   methods: {
     async init() {
       uni.showLoading()
