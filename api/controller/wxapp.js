@@ -36,8 +36,8 @@ async function getProjectBySearch(query) {
   }
 
   let sql = `select * from "Projects" P where "districtName" = $district and P."projectId" in
-(select "projectId" from "Houses" where "totalPrice" >= $minPrice and "totalPrice" <= $maxPrice
-and "pBuildingSquare" >= $minSize and "pBuildingSquare" <= $maxSize
+(select "projectId" from "Houses" where "totalPrice" > $minPrice and "totalPrice" <= $maxPrice
+and "pBuildingSquare" > $minSize and "pBuildingSquare" <= $maxSize
 group by "projectId")
 order by id desc
 limit $limit
